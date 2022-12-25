@@ -1,0 +1,33 @@
+name: Convert to other types
+on:
+  push:
+    branches:
+      - master
+      - main
+jobs:
+  Publish-Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies ...
+        id: dependency-install
+        run: |
+          yarn install
+
+      - name: Convert main.json
+        run: |
+          chmod +x scripts/convert;
+          ./scripts/convert;
