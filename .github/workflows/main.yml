@@ -4,6 +4,7 @@ on:
     branches:
       - master
       - main
+      - development
 jobs:
   Publish-Deploy:
     runs-on: ubuntu-latest
