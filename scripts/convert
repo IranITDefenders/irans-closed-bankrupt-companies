@@ -1,3 +1,44 @@
 #!/usr/bin/env node
 
-console.log('Hello world');
+'use strict';
+
+const { createWriteStream } = require("fs");
+const { readFile } = require("fs/promises");
+const { resolve } = require("path");
+
+const outputFileName = 'list';
+const outputPath = resolve('./types');
+const mainJsonPath = resolve('./main.json');
+const parseJsonToCsv = require('json2csv').parse;
+const mainJsonPromise = readFile(mainJsonPath, {flag: 'r', encoding: 'utf-8'});
+
+/**
+ * ### Convert to CSV
+ * Simply using json2csv package to convert
+ * main.json to {outputName}.csv
+ */
+async function toCsv() {
+  try {
+
+    const mainJson = await mainJsonPromise;
+    const csv = parseJsonToCsv(mainJson, {fields: ['name']});
+    console.log(csv)
+
+  }
+  catch(error) {
+    console.log(error);
+    throw new Error('Problem in converting to csv');
+  }
+  
+}
+
+(async function() {
+
+  try {
+    await toCsv();
+  }
+  catch(error) {
+    throw error;
+  }
+
+})();
