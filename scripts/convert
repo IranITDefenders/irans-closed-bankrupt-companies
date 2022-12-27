@@ -2,43 +2,130 @@
 
 'use strict';
 
-const { createWriteStream } = require("fs");
-const { readFile } = require("fs/promises");
+const { open, writeFile } = require("fs/promises");
 const { resolve } = require("path");
 
 const outputFileName = 'list';
-const outputPath = resolve('./types');
+const outputPath = resolve('./otherformats');
 const mainJsonPath = resolve('./main.json');
-const parseJsonToCsv = require('json2csv').parse;
-const mainJsonPromise = readFile(mainJsonPath, {flag: 'r', encoding: 'utf-8'});
+const jsoncsv = require('json-csv');
 
 /**
- * ### Convert to CSV
- * Simply using json2csv package to convert
- * main.json to {outputName}.csv
+ * After main.json is opened you can use this.
+ * @type {import("fs/promises").FileHandle}
+ */
+let mainJsonFileHandler = undefined;
+let mainJsonFileData = undefined;
+
+/**
+ * This function will return fd and generates mainJson file handler
+ * if not exists.
+ * @returns {Promise<number>}
+ */
+const openMainJsonFile = async () => {
+  if(!mainJsonFileHandler) {
+    mainJsonFileHandler = await open(mainJsonPath, 'r');
+  }
+}
+
+/**
+ * Because data is very low we try to read file as
+ * asynchronous.
+ * @param encoding { import("crypto").Encoding }
+ */
+const readMainJsonUsingFileHandler = async (encoding = "utf-8") => {
+  if(!mainJsonFileHandler) {
+    throw new Error('File handler does not exists');
+  }
+
+  if(!mainJsonFileData) {
+     mainJsonFileData = await mainJsonFileHandler.readFile(encoding);
+  }
+}
+
+/**
+ * Simply using `json2csv` package to convert
+ * `main.json` to {outputName}.csv
  */
 async function toCsv() {
   try {
 
-    const mainJson = await mainJsonPromise;
-    const csv = parseJsonToCsv(mainJson, {fields: ['name']});
-    console.log(csv)
+    const options = {
+      fields :
+      [
+        {
+          name: 'name',
+          label: 'Name',
+        },
 
+        {
+          name: 'reason',
+          label: 'Reason'
+        },
+        {
+          name: 'year',
+          label: 'Year'
+        },
+        {
+          name: 'website',
+          label: 'Website',
+        },
+        {
+          name: 'email',
+          label: 'Email',
+        },
+        {
+          name: 'phone',
+          label: 'Phone'
+        },
+        {
+          name: 'address',
+          label: 'Address',
+        },
+        {
+          name: 'instagram',
+          label: 'Instagram',
+        },
+        {
+          name: 'twitter',
+          label: 'Twitter'
+        },
+        {
+          name: 'linkedin',
+          label: 'Linkedin'
+        }
+      ],
+    };
+
+
+    const convertedCsvData = await jsoncsv.buffered(JSON.parse(mainJsonFileData), options);
+    
+    await writeFile(`${outputPath}/${outputFileName}` + '.csv', convertedCsvData);
   }
   catch(error) {
-    console.log(error);
-    throw new Error('Problem in converting to csv');
+    console.log(`Problem in converting to csv`);
+    throw error;
   }
   
 }
 
 (async function() {
-
   try {
+    console.log('Opening main.json --------------->');
+    await openMainJsonFile();
+
+    console.log('Reading file -------------------->');
+    await readMainJsonUsingFileHandler();
+
+    console.log('Converting to CSV --------------->');
     await toCsv();
+
+    // @TODO: normalize data and characters
+
+    console.log('Closing opened file ------------> ', mainJsonFileHandler.fd)
+    await mainJsonFileHandler.close();
   }
   catch(error) {
     throw error;
   }
-
 })();

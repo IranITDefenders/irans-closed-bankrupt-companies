@@ -7,6 +7,11 @@ commander@^6.1.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
   integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
 
+json-csv@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/json-csv/-/json-csv-4.0.7.tgz#ee452226f3bb99e33e8e6c087a085eafe84b9373"
+  integrity sha512-b2IDibY4B6OSgzRqncbXV24KqMVnjOBxSA4zLw3nutwZfUm0hsy4AGTf8PH4vaVRgcDAG3aBfwlPu7KDrlINtA==
+
 json2csv@^5.0.7:
   version "5.0.7"
   resolved "https://registry.yarnpkg.com/json2csv/-/json2csv-5.0.7.tgz#f3a583c25abd9804be873e495d1e65ad8d1b54ae"
