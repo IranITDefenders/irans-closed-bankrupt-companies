@@ -14,7 +14,7 @@ Or fork the repository and add your data to main.json and create a pull request.
 ## چگونه اسم و اطلاعات یک شرکت یا استارتاپ را اضافه کنم ؟
 با استفاده از این لینک، یک [issue](https://github.com/IranITDefenders/irans-closed-bankrupt-companies/issues/new/choose) را باز کنید و اطلاعات مورد نیاز را ارسال کنید سپس آنها را به لیست اضافه خواهیم کرد.
 یا مخزن را فورک کنید و داده های خود را به main.json اضافه کنید و یک درخواست pull ایجاد کنید.
-
+مثالی از issue ایجاد شده برای اضافه کردن یک اسم به لیست را میتوانید در [اینجا](https://github.com/IranITDefenders/irans-closed-bankrupt-companies/issues/3) ببینید.
 
 ## لطفا به فایل های داخل پوشه `otherformats` دست نزنید
 تمامی فایل های داخل این پوشه به صورت اتوماتیک تولید شده و دستکاری آن میتواند در کارکرد کلی تاثیر گذار باشد.
