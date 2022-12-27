@@ -1,0 +1,42 @@
+name: Convert to other types
+on:
+  push:
+    branches:
+      - main
+      - development
+jobs:
+  ConvertMainJson:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies ...
+        id: dependency-install
+        run: |
+          yarn install
+
+      - name: Convert main.json
+        run: |
+          chmod +x scripts/convert;
+          ./scripts/convert;
+
+      - name: Commit converted branch
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: "Automatic commit"
+          force: true
+          target_branch: convert

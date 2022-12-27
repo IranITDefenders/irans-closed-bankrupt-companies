@@ -1,0 +1,10 @@
+{
+  "name": "irans-closed-bankrupt-companies",
+  "version": "1.0.0",
+  "repository": "https://github.com/IranITDefenders/irans-closed-bankrupt-companies",
+  "author": "me-dira <mediraworkm@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "json-csv": "^4.0.7"    
+  }
+}
