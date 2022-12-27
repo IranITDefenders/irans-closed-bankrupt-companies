@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - development
 jobs:
   ConvertMainJson:
     runs-on: ubuntu-latest
@@ -30,3 +29,13 @@ jobs:
         run: |
           chmod +x scripts/convert;
           ./scripts/convert;
+
+      - name: Commit converted branch
+      uses: devops-infra/action-commit-push@master
+      with:
+        github_token: "${{ secrets.GITHUB_TOKEN }}"
+        add_timestamp: true
+        commit_prefix: "[AUTO]"
+        commit_message: "Automatic commit"
+        force: true
+        target_branch: origin/main
