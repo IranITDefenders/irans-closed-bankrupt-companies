@@ -36,5 +36,6 @@ jobs:
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           commit_prefix: "[AUTO]"
+          add_timestamp: false
           commit_message: "Convert main.json"
           target_branch: main
