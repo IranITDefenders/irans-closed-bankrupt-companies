@@ -36,4 +36,4 @@ jobs:
           add: "."
           commit: "--signoff"
           committer_name: "GHA"
-          message: "[AUTO] Convert main.json"
+          message: "[AUTO] Converting data"
