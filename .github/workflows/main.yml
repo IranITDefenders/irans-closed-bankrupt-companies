@@ -31,11 +31,10 @@ jobs:
           chmod +x scripts/convert;
           ./scripts/convert;
 
-      - name: Commit converted branch
-        uses: devops-infra/action-commit-push@master
-        with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}"
-          commit_prefix: "[AUTO]"
-          add_timestamp: false
-          commit_message: "Convert main.json"
-          target_branch: main
+      - name: Add & Commit
+        uses: EndBug/add-and-commit@v9.1.1
+        width:
+          add: "."
+          commit: "--signoff"
+          committer_name: "GHA"
+          message: "[AUTO] Convert main.json"
