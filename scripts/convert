@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
 const { open, writeFile } = require("fs/promises");
 const { resolve } = require("path");
 
-const outputFileName = 'list';
-const outputPath = resolve('./otherformats');
-const mainJsonPath = resolve('./main.json');
-const jsoncsv = require('json-csv');
+const outputFileName = "list";
+const outputPath = resolve("./otherformats");
+const mainJsonPath = resolve("./main.json");
+const jsoncsv = require("json-csv");
 
 /**
  * After main.json is opened you can use this.
@@ -23,10 +23,10 @@ let mainJsonFileData = undefined;
  * @returns {Promise<number>}
  */
 const openMainJsonFile = async () => {
-  if(!mainJsonFileHandler) {
-    mainJsonFileHandler = await open(mainJsonPath, 'r');
+  if (!mainJsonFileHandler) {
+    mainJsonFileHandler = await open(mainJsonPath, "r");
   }
-}
+};
 
 /**
  * Because data is very low we try to read file as
@@ -34,14 +34,14 @@ const openMainJsonFile = async () => {
  * @param encoding { import("crypto").Encoding }
  */
 const readMainJsonUsingFileHandler = async (encoding = "utf-8") => {
-  if(!mainJsonFileHandler) {
-    throw new Error('File handler does not exists');
+  if (!mainJsonFileHandler) {
+    throw new Error("File handler does not exists");
   }
 
-  if(!mainJsonFileData) {
-     mainJsonFileData = await mainJsonFileHandler.readFile(encoding);
+  if (!mainJsonFileData) {
+    mainJsonFileData = await mainJsonFileHandler.readFile(encoding);
   }
-}
+};
 
 /**
  * Simply using `json2csv` package to convert
@@ -49,83 +49,87 @@ const readMainJsonUsingFileHandler = async (encoding = "utf-8") => {
  */
 async function toCsv() {
   try {
-
     const options = {
-      fields :
-      [
+      fields: [
         {
-          name: 'name',
-          label: 'Name',
+          name: "name",
+          label: "Name",
         },
 
         {
-          name: 'reason',
-          label: 'Reason'
+          name: "reason",
+          label: "Reason",
         },
         {
-          name: 'year',
-          label: 'Year'
+          name: "year",
+          label: "Year",
         },
         {
-          name: 'website',
-          label: 'Website',
+          name: "website",
+          label: "Website",
         },
         {
-          name: 'email',
-          label: 'Email',
+          name: "email",
+          label: "Email",
         },
         {
-          name: 'phone',
-          label: 'Phone'
+          name: "phone",
+          label: "Phone",
         },
         {
-          name: 'address',
-          label: 'Address',
+          name: "address",
+          label: "Address",
         },
         {
-          name: 'instagram',
-          label: 'Instagram',
+          name: "instagram",
+          label: "Instagram",
         },
         {
-          name: 'twitter',
-          label: 'Twitter'
+          name: "twitter",
+          label: "Twitter",
         },
         {
-          name: 'linkedin',
-          label: 'Linkedin'
-        }
+          name: "linkedin",
+          label: "Linkedin",
+        },
+        {
+          name: "description",
+          label: "Description",
+        },
       ],
     };
 
+    const convertedCsvData = await jsoncsv.buffered(
+      JSON.parse(mainJsonFileData),
+      options
+    );
 
-    const convertedCsvData = await jsoncsv.buffered(JSON.parse(mainJsonFileData), options);
-    
-    await writeFile(`${outputPath}/${outputFileName}` + '.csv', convertedCsvData);
-  }
-  catch(error) {
+    await writeFile(
+      `${outputPath}/${outputFileName}` + ".csv",
+      convertedCsvData
+    );
+  } catch (error) {
     console.log(`Problem in converting to csv`);
     throw error;
   }
-  
 }
 
-(async function() {
+(async function () {
   try {
-    console.log('Opening main.json --------------->');
+    console.log("Opening main.json --------------->");
     await openMainJsonFile();
 
-    console.log('Reading file -------------------->');
+    console.log("Reading file -------------------->");
     await readMainJsonUsingFileHandler();
 
-    console.log('Converting to CSV --------------->');
+    console.log("Converting to CSV --------------->");
     await toCsv();
 
     // @TODO: normalize data and characters
 
-    console.log('Closing opened file ------------> ', mainJsonFileHandler.fd)
+    console.log("Closing opened file ------------> ", mainJsonFileHandler.fd);
     await mainJsonFileHandler.close();
-  }
-  catch(error) {
+  } catch (error) {
     throw error;
   }
 })();
