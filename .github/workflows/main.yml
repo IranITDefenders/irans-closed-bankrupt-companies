@@ -38,5 +38,4 @@ jobs:
           add_timestamp: true
           commit_prefix: "[AUTO]"
           commit_message: "Convert main.json"
-          force: true
-          target_branch: covert
+          target_branch: main
